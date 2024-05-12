@@ -9,7 +9,7 @@
 1. EC2 instance of t2.micro type and Ubuntu server 20.04LTS(HVM) was lunched in us-east-1 region using the AWS console.
 
 
-![alt text](<../steghub-DevOps-assignments/PHOTOS/Screenshot (37).png>)
+![alt text](</PHOTOS/Screenshot (37).png>)
    
 2. Creating of SSH key pair named key to access the instance.
    
