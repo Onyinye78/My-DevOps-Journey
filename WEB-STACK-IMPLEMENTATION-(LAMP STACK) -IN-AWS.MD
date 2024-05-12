@@ -16,9 +16,13 @@
 3. the private ssh key that got downloaded was located, permission was changed for private file and it was used then to connect the instance by running.
   
 
-`chmod 600 key.pem` 
+```
+chmod 600 key.pem
+```
 
-`ssh -i key.pem ubuntu@52.6.230.17`
+``` 
+ssh -i key.pem ubuntu@52.6.230.17
+```
 
 
 ![alt text](<PHOTOS//Screenshot (3)-3.png>)
@@ -28,12 +32,16 @@
 
 1. update a list of packages in package manager
 
-`sudo apt update`
+```
+sudo apt update
+```
 
 ![alt text](</PHOTOS/Screenshot (5).png>)
 
 
-`sudo apt upgrade -y`
+``` 
+sudo apt upgrade -y
+```
 
 ![alt text](<PHOTOS/Screenshot (6).png>)
 
@@ -41,15 +49,21 @@
 
 2. Run apache2 package installation
 
-`sudo apt install apache2 -y`
+``` 
+sudo apt install apache2 -y
+```
 
 ![alt text](<PHOTOS/Screenshot (8).png>)
 
 1. Verify that apache is running on as a service on the OS.
 
-`sudo systemctl e3nable apache2`
+```
+sudo systemctl e3nable apache2
+```
 
-`sudo systeml status apache2`
+``` 
+sudo systeml status apache2
+```
 
 if it is green and running, then apache2 is installed correctly
 
@@ -57,21 +71,30 @@ if it is green and running, then apache2 is installed correctly
 
 4. The server is running and can be accessed locally in the ubuntu shell by running this command below;
 
-`curl http://localhost:80`
-`or`
-`curl http://127.0.0.1:80`
+``` 
+
+curl http://localhost:80
+```
+or 
+```
+curl http://127.0.0.1:80
+```
 
 ![alt text](<PHOTOS/Screenshot (10).png>)
 
 5. Test with the public IP address if the Apache HTTP server can respond to the request from the internet using the Url on a browser.
 
-`http://52.6.230.17:80` 
+```
+http://52.6.230.17:80
+``` 
 
 ![alt text](<PHOTOS/Screenshot (16).png>)
 
 then another way to retrieve the public ip address other than checkthe aws console
 
-`curl -s http://169.254.169.254/latest/meta-data/public-ipv4`
+``` 
+curl -s http://169.254.169.254/latest/meta-data/public-ipv4
+```
 
 after running the command above, it gave erro 401-unauthorized output.
 
@@ -94,7 +117,9 @@ run the command again, the error message wont display again
 
 1. install a relational database (RDB)
 
-`sudo apt install mysql-server`
+```
+sudo apt install mysql-server
+```
 
 ![alt text](<PHOTOS/Screenshot (14).png>)
 
@@ -102,23 +127,30 @@ when installing you have to comfirm by typing y and then Enter.
 
 2. enable and verify that mysql is running with the command below
 
-`sudo systemctl enable --now mysqsl`
+```
+sudo systemctl enable --now mysqsl
+```
 
-` sudo systemctl status mysql`
+``` 
+ sudo systemctl status mysql
+ ```
 
 ![alt text](<PHOTOS/mysql pix.png>)
 
 3. log into mysql console
 
-`sudo mysql`
+``` 
+sudo mysql
+```
 
 ![alt text](<PHOTOS/Screenshot (17).png>)
 
-`ALTERUSER'root'@'localhost' IDENTIFIED WITH mysql_native_password BY'PassWord.1';`
+```
+ALTERUSER'root'@'localhost' IDENTIFIED WITH mysql_native_password BY'PassWord.1';
+```
 
 
-![alt text](<
-PHOTOS/Screenshot (17)-1.png>)
+![alt text](<PHOTOS/Screenshot (17)-1.png>)
 
 
 
@@ -132,13 +164,17 @@ the user password was defined as
 
 exit the Mysql shell
 
-`exit`
+``` 
+exit
+```
 
 1. Run an interactive script to secure Mysql
 
 the security script comes pre installed with mysql, it also removes some insecure settings and lockdwon access to the data base
 
-`sudo mysql_secure_installation`
+``` 
+sudo mysql_secure_installation
+```
 
 ![alt text](<PHOTOS/Screenshot (18).png>)
 
@@ -146,7 +182,9 @@ whether the validation password plugin is set up ,the server will ask to select 
 
 6. log into mysql console after changing the root user. 
 
-`sudo mysql -p`
+``` 
+sudo mysql -p
+```
 
 ![alt text](<PHOTOS/Screenshot (20).png>)
 
@@ -155,7 +193,9 @@ whether the validation password plugin is set up ,the server will ask to select 
 
 Exit Mysql Shell
 
-    `exit`
+    ```
+    exit
+    ```
 
 #  INSTALL PHP 
 
@@ -163,14 +203,18 @@ Apache is  installed to serve your content and MySQL installed to store and mana
 
 to install the 3 packages once and run it
 
-`sudo apt install php 
-libapache2-mod-php php-mysql`
+``` 
+sudo apt install php 
+libapache2-mod-php php-mysql
+```
 
 ![alt text](<PHOTOS/Screenshot (22).png>)
 
 if the installation is finished then run the following command 
 
-`php -v`
+``` 
+php -v
+```
 
 ![alt text](<PHOTOS/Screenshot (23).png>)
 
@@ -179,20 +223,25 @@ lamp stack is completely installed here and operational
 # create a virtual host for the website using Apache
 Create the directory for projectlamp using 'mkdir' command 
 
-`sudo mkdir /var/www/projectlamp`
+```
+sudo mkdir /var/www/projectlamp
+```
 
 ![alt text](<PHOTOS/Screenshot (23)-1.png>)
 
  assign ownership of the directory with the $USER environment variable, which will reference the current system user:
 
- `sudo chown -R $USER:$USER /var/www/projectlamp`
-
+ ``` 
+ sudo chown -R $USER:$USER /var/www/projectlamp
+```
  
 ![alt text](<PHOTOS/Screenshot (23)-2.png>)
 
  create and open a new configuration file in apaches 'site avaliable' directory using vim.
 
- `sudo vi /etc/apache2/sites-available/projectlamp.conf`
+ ``` 
+ sudo vi /etc/apache2/sites-available/projectlamp.conf
+ ```
 
  ![alt text](<PHOTOS/Screenshot (26).png>)
 
@@ -217,14 +266,18 @@ paste the following bare-bones configuration below;
 1. show the new file in the sites-available directory
 
 
-` sudo ls /etc/apache2/sites-available`
+``` 
+ sudo ls /etc/apache2/sites-available
+ ```
 `000-default.conf  default-ssl.conf  projectlamp.conf`
 
 With this VirtualHost configuration, we’re telling Apache to serve projectlamp using /var/www/projectlampl as its web root directory
 
 4. Enable the new  virtual host
 
-`sudo a2ensite projectlamp`
+``` 
+sudo a2ensite projectlamp
+```
 
 ![alt text](<PHOTOS/Screenshot (27)-2.png>)
 
@@ -232,17 +285,23 @@ With this VirtualHost configuration, we’re telling Apache to serve projectlamp
 
 this is because Apache’s default configuration would overwrite your virtual host , it is requried if a custom domianis not being used.
 
-`sudo a2dissite 000-default`
+``` 
+sudo a2dissite 000-default
+```
 
 ![alt text](<PHOTOS/Screenshot (27)-1.png>)
 
  To make sure your configuration file doesn’t contain syntax errors, run:
 
- `sudo apache2ctl configtest`
+ ``` 
+ sudo apache2ctl configtest
+ ```
 
  Reload apache for changes to take effect
 
- `sudo systemctl reload apache2`
+ ``` 
+ sudo systemctl reload apache2
+ ```
 
  ![alt text](<PHOTOS/Screenshot (28).png>)
 
@@ -255,20 +314,26 @@ this is because Apache’s default configuration would overwrite your virtual ho
 
  open your website URL using IP address:
 
- `http://52.91.29.202:80`
+ ``` 
+ http://52.91.29.202:80
+ ```
 
  ![alt text](<PHOTOS/Screenshot (29).png>)
 
  open thwe website with public dns name (port is optional)
 
- `http://<Public-DNS-Name>:80`
+ ``` 
+ http://<Public-DNS-Name>:80
+ ```
 
  # Enable PHP on the website
 With the default DirectoryIndex settings on Apache, a file named index.html will always take precedence over an index.php file. This is useful for setting up maintenance pages in PHP applications, by creating a temporary index.html file containing an informative message to visitors. Because this page will take precedence over the index.php page, it will then become the landing page for the application. Once maintenance is over, the index.html is renamed or removed from the document root, bringing back the regular application page. if the behavior needs to be changed, /etc/apache2/mods-enabled/dir.conf file and change the order in which the index.php file is listed within the DirectoryIndex directive:
 
 Open the directive;
 
-`sudo vim /etc/apache2/mods-enabled/dir.conf`
+```
+sudo vim /etc/apache2/mods-enabled/dir.conf
+````
 
 ![alt text](<PHOTOS/Screenshot (31).png>)
 
@@ -288,7 +353,9 @@ Open the directive;
 
 Reload Apache
 
-`sudo systemctl reload apache2`
+``` 
+sudo systemctl reload apache2
+```
 
 ![alt text](<PHOTOS/Screenshot (31)-1.png>)
 
@@ -301,9 +368,10 @@ we will create a PHP script to test that PHP is correctly installed and configur
 
 This will open a blank file. Add the following text, which is valid PHP code, inside the file
 
-
-`<?php`
-`phpinfo();`
+``` php
+<?php
+phpinfo();
+```
 
 
 
@@ -318,7 +386,10 @@ This page provides information about your server from the perspective of PHP. It
 
 After checking the relevant information about your PHP server through this page, it’s best to remove the file you created as it contains sensitive information about your PHP environment -and your Ubuntu server. You can use rm to do so:
 
- `sudo rm /var/www/projectlamp/index.php`
+ ```
+      sudo rm /var/www/projectlamp/index.php`
+
+ ```
 
  ![alt text](<PHOTOS/Screenshot (36).png>)
 
