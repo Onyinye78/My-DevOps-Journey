@@ -30,7 +30,7 @@ add repository for Node.js package for Ubuntu.
 ```
    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 ```
-![alt text](</Photos.md/Screenshot (91).png>)
+![alt text](<Photos.md/Screenshot (91).png>)
 
 # Install Nodes.js on the Server
 
@@ -38,20 +38,20 @@ add repository for Node.js package for Ubuntu.
     sudo apt-get install -y nodejs
 ```
 
-![alt text](</Photos.md/Screenshot (93).png>)
+![alt text](<Photos.md/Screenshot (93).png>)
 
-The command above installs both nodejs and npm. NPM is a package manager for Node like apt for Ubuntu, it is used to install Node modules & packages and to manage dependency conflicts.
+gitThe command above installs both nodejs and npm. NPM is a package manager for Node like apt for Ubuntu, it is used to install Node modules & packages and to manage dependency conflicts.
 
 lets check the version of Node.js and npm installed.
 
 ```
-   node -v
+  node -v
 ```
 
 ```
    npm -v
 ```
-![alt text](</Photos.md/Screenshot (95).png>)
+![alt text](<Photos.md/Screenshot (95).png>)
 
 Create a new directory for TO-DO Project:
 
@@ -65,7 +65,7 @@ verify that the Todo directory is created , run this command
 ls
 ```
 
-![alt text](</Photos.md/Screenshot (97).png>)
+![alt text](<Photos.md/Screenshot (97).png>)
 now change the current directoy to the newly created one:
 
 ```
@@ -80,7 +80,7 @@ npm init
 
 the npm init creates a package.json file in the Todo directory, This file will contains information about the application and the dependencies that it needs to run the Todo  app. 
 
-![alt text](</Photos.md/Screenshot (137).png>)
+![alt text](<Photos.md/Screenshot (137).png>)
 
 
 
@@ -93,7 +93,7 @@ expressJS is a frame work of Node.js. the development team will use Express.js t
 ```
 npm install express
 ```
-![alt text](</Photos.md/Screenshot (103).png>)
+![alt text](<Photos.md/Screenshot (103).png>)
 
 create a file index.js 
 
@@ -107,7 +107,7 @@ Run ls to confirm if index.js file is created Then install the dotenv module
 npm install dotenv
 ```
 
-![alt text](</Photos.md/Screenshot (104).png>)
+![alt text](<Photos.md/Screenshot (104).png>)
 
 open the index.js file with this command:
 
@@ -151,14 +151,14 @@ start the server to see if it works. Open your terminal in the same directory as
     node index.js
 ```
 
-![alt text](</Photos.md/Screenshot (108).png>)
+![alt text](<Photos.md/Screenshot (108).png>)
 
 if installed you should see Server running on port 5000 in your terminal. we need to ensure that our EC2 instance allows traffic on port 5000 by updating the inbound rules for the EC2 instance, added a custom TCP rule for port 5000 to allow traffic from all IP addresses.
 
 Open up your browser and try to access your server's Public IP or Public DNS name followed by port 5000
 
 
-![alt text](</Photos.md/Screenshot (109).png>)
+![alt text](<Photos.md/Screenshot (109).png>)
 
 notice also that in the index.js snippet, we are using dotenv package to load the port number on which the apps backend listens, from the environment variable. we will need to install the dotenv package. to install the dotenv package , run the folloing command:
 
@@ -187,7 +187,7 @@ create a file api.js with the command below
 touch api.js
 ```
 
-![alt text](</Photos.md/Screenshot (111).png>)
+![alt text](<Photos.md/Screenshot (111).png>)
 
 Open the file with the command below
 
@@ -228,7 +228,7 @@ Change directory back Todo folder with cd .. and install Mongoose
 npm install mongoose
 ```
 
-![alt text](</Photos.md/Screenshot (123).png>)
+![alt text](<Photos.md/Screenshot (123).png>)
 
 
 Create a new folder with mkdir models command, change the directory into the newly created models folder with cd models, inside the models folder, create a file and name it todo.js.
@@ -311,7 +311,7 @@ use a Database Management as a serive on the cloud. (DBaas) but for this service
 i created a database To-Do list and a collection To-Do items, a user db-admin with a password to access it then i retrieved the connection string for the database. this connection string will be used to connect the backend to the mongoDB database.
 
 
-![alt text](</Photos.md/Screenshot (115).png>)
+![alt text](<Photos.md/Screenshot (115).png>)
 
 
 
@@ -382,7 +382,7 @@ start the server using the command;
   node index.js
 ```
 
-![alt text](</Photos.md/Screenshot (130).png>)
+![alt text](<Photos.md/Screenshot (130).png>)
 
 If you see 'Database connected successfully' then we have our backend configured
 
@@ -397,7 +397,7 @@ install postman
 create a POST requestto the API
  http://<PublicIP-or-PublicDNS>:5000/api/todos. This request sends a new task to our To-Do list so the application could store it in the database. make sure that the set header key Content type as appilication/json
 
-![alt text](</Photos.md/Screenshot (132)-1.png>)
+![alt text](<Photos.md/Screenshot (132)-1.png>)
 
 
  Create a GET request to your API on http://<PublicIP-or-PublicDNS>:5000/api/todos. This request retrieves all existing records from out To-do application (backend requests these records from the database and sends it us back as a response to GET request).
@@ -471,7 +471,7 @@ we will be running the frontend server on port 3000. I added a custom TCP rule f
 
 
 
-![alt text](</Photos.md/Screenshot (145).png>)
+![alt text](<Photos.md/Screenshot (145).png>)
 
 
 ensure you are inside the Todo directory, run:
@@ -480,13 +480,13 @@ ensure you are inside the Todo directory, run:
   npm run dev
 ```
 
-![alt text](</Photos.md/Screenshot (156).png>)
+![alt text](<Photos.md/Screenshot (156).png>)
 
 
 We should see - on the browser if we load http://3.85.210.229:3000
 
 
-![alt text](</Photos.md/Screenshot (151).png>)
+![alt text](<Photos.md/Screenshot (151).png>)
 
 
 now the app is open and running on localhost:3000 by opening TCP port 3000 on EC2 and adding a new Security Group rule. 
@@ -504,7 +504,7 @@ move to the src directory
 ```
    cd src
 ```
-![alt text](</Photos.md/Screenshot (152).png>)
+![alt text](<Photos.md/Screenshot (152).png>)
 
 
 Inside src folder create another folder called components
@@ -707,7 +707,7 @@ export default Todo;
 ```
 
 
-![alt text](</Photos.md/Screenshot (161).png>)
+![alt text](<Photos.md/Screenshot (161).png>)
 
 
  we need to make adjusment to our react code. delete the  logo and adjust our App.js to look like this.
@@ -879,7 +879,7 @@ monospace;
 ```
 
 
-![alt text](</Photos.md/Screenshot (158).png>)
+![alt text](<Photos.md/Screenshot (158).png>)
 
 
 Go to the Todo directory
@@ -895,7 +895,7 @@ run Todo directory:
 npm run dev
 ```
 
-![alt text](</Photos.md/Screenshot (160).png>)
+![alt text](<Photos.md/Screenshot (160).png>)
 
 without errors while saving the files, our To-Do app is ready and functional with creating a task, delecting a task and viewing all the tasks.
 
