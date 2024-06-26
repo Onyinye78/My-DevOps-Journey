@@ -18,30 +18,30 @@ Node.js is a javascript runtime built on Chrome's V8 JavaScript engine. Node.js 
 sudo apt update
 ```
 
-![alt text](<Photos.md/Screenshot (163).png>)
+![alt text](<Photos.md/Screenshot (208).png>)
 
 ## Upgrade ubuntu
 
 ```
-sudo apt upgrade
+sudo apt upgrade -y
 ```
 
-![alt text](<Photos.md/Screenshot (164).png>)
+![alt text](<Photos.md/Screenshot (209).png>)
 
-## Add certifications
-
-```
-  sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
-```
-
-
-![alt text](<Photos.md/Screenshot (166).png>)
+## install Nodes.js 20(current latest verion)
 
 ```
- curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
- ```
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+```
 
- ![alt text](<Photos.md/Screenshot (168).png>)
+![alt text](<Photos.md/Screenshot (210).png>)
+
+verify the installation
+
+```
+node -v
+npm -v
+```
 
  ## install NodeJS
 
@@ -53,15 +53,20 @@ sudo apt upgrade
 
 MongoDB stores data in flexible, JSON-LIKE documents. Fields in a database can vary from document to document and data structure can be changed over time. For our example application, we are adding book records to MongoDB that contain book name, ISBN number, author and number of pages.
 
-```
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
-```
+Add MongoDB GPG Key
 
 ```
-echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
+curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
 ```
 
-![alt text](<Photos.md/Screenshot (170).png>)
+add MongoDB repository
+
+```
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+```
+
+
+![alt text](<Photos.md/Screenshot (211).png>)
 
 install MongoDB
 
@@ -69,131 +74,38 @@ install MongoDB
 sudo apt install -y mongodb
 ```
 
-![alt text](<Photos.md/Screenshot (171).png>)
+![alt text](<Photos.md/Screenshot (212).png>)
 
-i experienced this error while installing mongoDB and i have to install gnupg and curl if they are not installed already from my terminal.
-
-```
-sudo apt-get install gnupg curl
-```
-after that i deleted the previous entries
+## verify MongoDB installation:
 
 ```
-sudo rm /etc/apt/sources.list.d/mongodb-org*.list
+mongod --version
 ```
 
 
-then i List the keys so that they can be deleted
-
-```
-sudo apt-key list
-```
-
-![alt text](<Photos.md/Screenshot (176).png>)
-
-```
-sudo apt-key del <key>
-```
-
-after that i added gpg keys 
-
-```
- curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
- ```
-
- Add mongodb repo
-
- ```
- echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
- ```
-
- Update package manager:
-
-```
-sudo apt update
-```
-
-![alt text](<Photos.md/Screenshot (178).png>)
-
-Install mongodb
-
-```
- sudo apt install -y mongodb-org
- ```
-
- ![alt text](<Photos.md/Screenshot (180).png>)
-
- Verify installation
-
- ```
- mongod --version
- ```
-
- ![alt text](<Photos.md/Screenshot (182).png>)
-
- After you do that above, your mongodb will fail to start, but there is a solution to that,
-Create a new service file for MongoDB.
-
-```
-sudo nano /etc/systemd/system/mongodb.service
-```
+![alt text](<Photos.md/Screenshot (213).png>)
 
 
-Add the following content to the file:
-
-```
-  [Unit]
-  Description=MongoDB Database Server
-  Documentation=https://docs.mongodb.org/manual
-  After=network.target
-  [Service]
-  User=mongodb
-  ExecStart=/usr/bin/mongod --config /etc/mongod.conf
-  PIDFile=/var/run/mongodb/mongod.pid
-  LimitNOFILE=64000
-  TimeoutStopSec=60
-  Restart=on-failure
-  [Install]
-  WantedBy=multi-user.target
-```
-
-Save and close the file Ctrl+O Enter Ctrl+X.
-Reload the systemd daemon:
-
-```
-sudo systemctl daemon-reload
-```
-
-Then start mongod
+ ## Start and enable MongoDB service:
 
 ```
 sudo systemctl start mongod
 ```
+```
+sudo systemctl enable mongod
+```
+
+verify service status:
 
 ```
 sudo systemctl status mongod
 ```
 
-![alt text](<Photos.md/Screenshot (183).png>)
+![alt text](<Photos.md/Screenshot (214).png>)
 
 
 
-Install npm - Node package manager
-
-```
-sudo apt install -y npm
-```
-
-Check if node and npm are installed
-
-```
-node -v
-npm -v
-```
-![alt text](<Photos.md/Screenshot (185).png>)
-
-
-Install 'body-parser body-parser package
+## Install 'body-parser' package
 
 
 We need 'body-parser' package to help us process JSON files passed in requests to the server.
@@ -201,7 +113,42 @@ We need 'body-parser' package to help us process JSON files passed in requests t
 ```
 sudo npm install body-parser
 ```
-![alt text](<Photos.md/Screenshot (187).png>)
+![alt text](<Photos.md/Screenshot (215).png>)
+
+
+Create a directory called Books:
+
+```
+mkdir Books && cd Books
+```
+
+Initialize npm projects in Books directory:
+
+```
+npm init -y
+```  
+
+![alt text](<Photos.md/Screenshot (220).png>)
+
+## Add a file named server.js
+
+
+nano server.js
+
+Input the following code into 'server.js':
+
+```
+var express = require('express');
+var bodyParser = require('body-parser');
+var app = express();
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
+require('./apps/routes')(app);
+app.set('port', 3300);
+app.listen(app.get('port'), function() {
+    console.log('Server up: http://localhost:' + app.get('port'));
+});
+```
 
 
 ## Install Express and set up routes to the server
@@ -212,17 +159,11 @@ We also will use Mongoose package which provides a straight-forward, schema-base
 
 ```
 sudo npm install express mongoose
-``` 
-
-create a Books folder 
-
-```
-mkdir Books 
 ```
 
-```
-cd Books
-```
+![alt text](<Photos.md/Screenshot (216).png>)
+
+
 
 In 'Books' folder, create a folder named apps
 
@@ -241,44 +182,53 @@ Copy and paste the code below into routes.js
 
 ```
 var Book = require('./models/book');
+var path = require('path');
+
 module.exports = function(app) {
-  app.get('/book', function(req, res) {
-    Book.find({}, function(err, result) {
-      if ( err ) throw err;
-      res.json(result);
+    app.get('/book', async function(req, res) {
+        try {
+            const result = await Book.find({});
+            res.json(result);
+        } catch (err) {
+            res.status(500).send(err);
+        }
     });
-  }); 
-  app.post('/book', function(req, res) {
-    var book = new Book( {
-      name:req.body.name,
-      isbn:req.body.isbn,
-      author:req.body.author,
-      pages:req.body.pages
+
+    app.post('/book', async function(req, res) {
+        try {
+            var book = new Book({
+                name: req.body.name,
+                isbn: req.body.isbn,
+                author: req.body.author,
+                pages: req.body.pages
+            });
+            const result = await book.save();
+            res.json({
+                message: "Successfully added book",
+                book: result
+            });
+        } catch (err) {
+            res.status(500).send(err);
+        }
     });
-    book.save(function(err, result) {
-      if ( err ) throw err;
-      res.json( {
-        message:"Successfully added book",
-        book:result
-      });
+
+    app.delete("/book/:isbn", async function(req, res) {
+        try {
+            const result = await Book.findOneAndRemove({ isbn: req.params.isbn });
+            res.json({
+                message: "Successfully deleted the book",
+                book: result
+            });
+        } catch (err) {
+            res.status(500).send(err);
+        }
     });
-  });
-  app.delete("/book/:isbn", function(req, res) {
-    Book.findOneAndRemove(req.query, function(err, result) {
-      if ( err ) throw err;
-      res.json( {
-        message: "Successfully deleted the book",
-        book: result
-      });
+
+    app.get('*', function(req, res) {
+        res.sendFile(path.join(__dirname + '/public', 'index.html'));
     });
-  });
-  var path = require('path');
-  app.get('*', function(req, res) {
-    res.sendfile(path.join(__dirname + '/public', 'index.html'));
-  });
 };
 ```
-
 
 In the 'apps' folder, create a folder named models
 
@@ -297,18 +247,23 @@ Copy and paste the code below into 'book.js'
 ```
 var mongoose = require('mongoose');
 var dbHost = 'mongodb://localhost:27017/test';
-mongoose.connect(dbHost);
+mongoose.connect(dbHost, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection;
 mongoose.set('debug', true);
-var bookSchema = mongoose.Schema( {
-  name: String,
-  isbn: {type: String, index: true},
-  author: String,
-  pages: Number
+
+var bookSchema = mongoose.Schema({
+    name: String,
+    isbn: { type: String, index: true },
+    author: String,
+    pages: Number
 });
+
 var Book = mongoose.model('Book', bookSchema);
-module.exports = mongoose.model('Book', bookSchema);
+
+module.exports = Book;
 ```
+
+
 ## Access the routes with AngularJS
 
 AngularJS provides a web framework for creating dynamic views in your web applications. In this tutorial, we use AngularJS to connect our web page with Express and perform actions on our book register.
@@ -378,9 +333,6 @@ In 'public' folder, create a file named index.html
 ```
 nano index.html
 ```
-
-![alt text](<Photos.md/Screenshot (202).png>)
-
 copy and paste the code below into index.html file.
 
 ```
@@ -436,6 +388,7 @@ copy and paste the code below into index.html file.
 </html>
 ```
 
+![alt text](<Photos.md/Screenshot (217).png>)
 
 Change the directory back up to 'Books'
 
@@ -448,7 +401,7 @@ Start the server by running this command:
 ```
 node server.js
 ```
-![alt text](<Photos.md/Screenshot (204).png>)
+![alt text](<Photos.md/Screenshot (218).png>)
 
 The server is now up and running, we can connect it via port 3300. You can launch a separate Putty or SSH console to test what curl command returns locally.
 
@@ -474,10 +427,8 @@ curl -s http://169.254.169.254/latest/meta-data/public-ipv4 for Public IP addres
 curl -s http://169.254.169.254/latest/meta-data/public-hostname for Public DNS name.
 ```
 
-![alt text](<Photos.md/Screenshot (205).png>)
+![alt text](<Photos.md/Screenshot (219).png>)
 
-
-![alt text](<Photos.md/Screenshot (203).png>)
 
 Everything is working!
 
