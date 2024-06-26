@@ -1,4 +1,4 @@
-## Before we begin this project, ensure you have;
+## Before we begin this project, ensure you have the following:
 1. Aws account
 2. create an EC2 instance of t2.micro family with Ubuntu Server 24.04 LTS.
 3. Basic understanding of Javascript.
@@ -8,33 +8,42 @@
 7. Basic understanding of Non-Relational Databases.
 
 
-## INSTALL NODEJS
+# INSTALL NODEJS
 
 Node.js is a javascript runtime built on Chrome's V8 JavaScript engine. Node.js is used in this tutorial to set up the Express routes and AngularJS controllers.
 
-Update ubuntu
+## Update ubuntu
 
 ```
 sudo apt update
 ```
 
-Upgrade ubuntu
+![alt text](<Photos.md/Screenshot (163).png>)
+
+## Upgrade ubuntu
 
 ```
 sudo apt upgrade
 ```
 
-Add certifications
+![alt text](<Photos.md/Screenshot (164).png>)
+
+## Add certifications
 
 ```
   sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
 ```
 
+
+![alt text](<Photos.md/Screenshot (166).png>)
+
 ```
- curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+ curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
  ```
 
- install NodeJS
+ ![alt text](<Photos.md/Screenshot (168).png>)
+
+ ## install NodeJS
 
  ```
  sudo apt install -y nodejs
@@ -52,13 +61,17 @@ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A1
 echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
 ```
 
+![alt text](<Photos.md/Screenshot (170).png>)
+
 install MongoDB
 
 ```
 sudo apt install -y mongodb
 ```
 
-i experienced error while installing mongoDB and i have install gnupg and curl if they are not installed already from my terminal.
+![alt text](<Photos.md/Screenshot (171).png>)
+
+i experienced this error while installing mongoDB and i have to install gnupg and curl if they are not installed already from my terminal.
 
 ```
 sudo apt-get install gnupg curl
@@ -69,11 +82,14 @@ after that i deleted the previous entries
 sudo rm /etc/apt/sources.list.d/mongodb-org*.list
 ```
 
+
 then i List the keys so that they can be deleted
 
 ```
 sudo apt-key list
 ```
+
+![alt text](<Photos.md/Screenshot (176).png>)
 
 ```
 sudo apt-key del <key>
@@ -97,11 +113,15 @@ after that i added gpg keys
 sudo apt update
 ```
 
+![alt text](<Photos.md/Screenshot (178).png>)
+
 Install mongodb
 
 ```
  sudo apt install -y mongodb-org
  ```
+
+ ![alt text](<Photos.md/Screenshot (180).png>)
 
  Verify installation
 
@@ -109,8 +129,9 @@ Install mongodb
  mongod --version
  ```
 
- After you do that above, your mongodb will fail to start, but that's easy to resolve
-Solution to failing to start after you install it.
+ ![alt text](<Photos.md/Screenshot (182).png>)
+
+ After you do that above, your mongodb will fail to start, but there is a solution to that,
 Create a new service file for MongoDB.
 
 ```
@@ -145,9 +166,17 @@ sudo systemctl daemon-reload
 
 Then start mongod
 
-```sudo systemctl start mongod
+```
+sudo systemctl start mongod
+```
+
+```
 sudo systemctl status mongod
 ```
+
+![alt text](<Photos.md/Screenshot (183).png>)
+
+
 
 Install npm - Node package manager
 
@@ -161,14 +190,18 @@ Check if node and npm are installed
 node -v
 npm -v
 ```
+![alt text](<Photos.md/Screenshot (185).png>)
+
 
 Install 'body-parser body-parser package
+
 
 We need 'body-parser' package to help us process JSON files passed in requests to the server.
 
 ```
 sudo npm install body-parser
 ```
+![alt text](<Photos.md/Screenshot (187).png>)
 
 
 ## Install Express and set up routes to the server
@@ -207,59 +240,45 @@ Copy and paste the code below into routes.js
 
 
 ```
-   // Import necessary modules
-const Book = require('./models/book');
-const path = require('path');
-
+var Book = require('./models/book');
 module.exports = function(app) {
-
-  // Get all books
-  app.get('/book', async function(req, res) {
-    try {
-      let result = await Book.find({});
+  app.get('/book', function(req, res) {
+    Book.find({}, function(err, result) {
+      if ( err ) throw err;
       res.json(result);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-
-  // Add a new book
-  app.post('/book', async function(req, res) {
-    try {
-      const { name, isbn, author, pages } = req.body;
-      const book = new Book({ name, isbn, author, pages });
-      let result = await book.save();
-      res.json({
-        message: "Successfully added book",
-        book: result
+    });
+  }); 
+  app.post('/book', function(req, res) {
+    var book = new Book( {
+      name:req.body.name,
+      isbn:req.body.isbn,
+      author:req.body.author,
+      pages:req.body.pages
+    });
+    book.save(function(err, result) {
+      if ( err ) throw err;
+      res.json( {
+        message:"Successfully added book",
+        book:result
       });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
+    });
   });
-
-  // Delete a book by ISBN
-  app.delete('/book/:isbn', async function(req, res) {
-    try {
-      let result = await Book.findOneAndRemove({ isbn: req.params.isbn });
-      res.json({
+  app.delete("/book/:isbn", function(req, res) {
+    Book.findOneAndRemove(req.query, function(err, result) {
+      if ( err ) throw err;
+      res.json( {
         message: "Successfully deleted the book",
         book: result
       });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
+    });
   });
-
-  // Serve the index.html file for any other routes
+  var path = require('path');
   app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, '../public', 'index.html'));
+    res.sendfile(path.join(__dirname + '/public', 'index.html'));
   });
 };
 ```
+
 
 In the 'apps' folder, create a folder named models
 
@@ -276,18 +295,20 @@ nano book.js
 Copy and paste the code below into 'book.js'
 
 ```
-      var mongoose = require('mongoose');
-
-     var bookSchema = new mongoose.Schema({
-       name: String,
-       isbn: { type: String, index: true },
-       author: String,
-       pages: Number
-     });
-
-     module.exports = mongoose.model('Book', bookSchema);
+var mongoose = require('mongoose');
+var dbHost = 'mongodb://localhost:27017/test';
+mongoose.connect(dbHost);
+mongoose.connection;
+mongoose.set('debug', true);
+var bookSchema = mongoose.Schema( {
+  name: String,
+  isbn: {type: String, index: true},
+  author: String,
+  pages: Number
+});
+var Book = mongoose.model('Book', bookSchema);
+module.exports = mongoose.model('Book', bookSchema);
 ```
-
 ## Access the routes with AngularJS
 
 AngularJS provides a web framework for creating dynamic views in your web applications. In this tutorial, we use AngularJS to connect our web page with Express and perform actions on our book register.
@@ -358,6 +379,8 @@ In 'public' folder, create a file named index.html
 nano index.html
 ```
 
+![alt text](<Photos.md/Screenshot (202).png>)
+
 copy and paste the code below into index.html file.
 
 ```
@@ -425,6 +448,7 @@ Start the server by running this command:
 ```
 node server.js
 ```
+![alt text](<Photos.md/Screenshot (204).png>)
 
 The server is now up and running, we can connect it via port 3300. You can launch a separate Putty or SSH console to test what curl command returns locally.
 
@@ -449,7 +473,13 @@ curl -s http://169.254.169.254/latest/meta-data/public-ipv4 for Public IP addres
 ```
 curl -s http://169.254.169.254/latest/meta-data/public-hostname for Public DNS name.
 ```
+
+![alt text](<Photos.md/Screenshot (205).png>)
+
+
+![alt text](<Photos.md/Screenshot (203).png>)
+
 Everything is working!
 
 ## SUMMARY
-In this project, I successfully implemented a web solution using the MEAN stack (MongoDB, ExpressJS, Angular, NodeJS) on the AWS cloud platform. This project involved setting up an EC2 instance, installing and configuring the necessary components, and developing a full-fledged web application to manage a book registry.
+In this project, I successfully implemented a web solution using the MEAN stack (MongoDB, ExpressJS, Angular, NodeJS) on the AWS cloud platform. This project involved setting up an EC2 instance, installing and configuring the necessary components, and developing a full-fledged web application to manage a book registry
